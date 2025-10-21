@@ -62,7 +62,7 @@ export function SignInForm() {
     setError(null);
     setLoading(true);
 
-    const { error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email,
       password,
       rememberMe,
@@ -73,6 +73,9 @@ export function SignInForm() {
     if (error) {
       setError(error.message || "Something went wrong");
     } else {
+      // Bypass pengecekan tipe TypeScript untuk 
+      const userRole = (data?.user as any)?.role;
+      console.log('User Role Diterima:', userRole);
       toast.success("Signed in successfully");
       router.push(redirect ?? "/dashboard");
     }

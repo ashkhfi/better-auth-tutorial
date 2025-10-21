@@ -6,6 +6,7 @@ import prisma from "./prisma";
 import { passwordSchema } from "./validation";
 
 export const auth = betterAuth({
+
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -72,6 +73,14 @@ export const auth = betterAuth({
           throw new APIError("BAD_REQUEST", {
             message: "Password not strong enough",
           });
+        }
+      }
+    }),
+    after: createAuthMiddleware(async (ctx) => {
+      if (ctx.path === "/sign-in/email") {
+        const newSession = ctx.context.newSession;
+        if (newSession) {
+          ctx.context.returned = { user: newSession.user };
         }
       }
     }),

@@ -12,7 +12,5 @@ export async function deleteApplication() {
 
   if (user.role !== "admin") forbidden();
 
-  // Delete app...
-
   await setTimeout(800);
 }
